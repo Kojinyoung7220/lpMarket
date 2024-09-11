@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>음악 상점</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container mt-5">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" class="mb-5"></div> <!-- 상단과의 간격 -->
+
+    <div class="row text-center mb-5"> <!-- 중간 간격 -->
+        <div class="col-md-4 mb-4">
+            <h3>회원 기능</h3>
+            <p>회원 관리 및 독점 콘텐츠 보기</p>
+            <a class="btn btn-lg btn-primary" href="/members">회원 목록</a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h3>상품 기능</h3>
+            <p>다양한 음악 앨범 탐색</p>
+            <a class="btn btn-lg btn-success" href="/items/new">상품 등록</a>
+            <a class="btn btn-lg btn-success" href="/items">상품 목록</a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h3>주문 관리</h3>
+            <p>주문 추적 및 구매 관리</p>
+            <a class="btn btn-lg btn-info" href="/order">주문하기</a>
+            <a class="btn btn-lg btn-info" href="/orders">주문 내역</a>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer" class="mt-5"></div> <!-- 하단과의 간격 -->
+</div>
+</body>
+</html>

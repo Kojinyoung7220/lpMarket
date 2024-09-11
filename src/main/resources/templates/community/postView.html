@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 보기</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        .post-view-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .post-meta {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .post-content {
+            font-size: 1.125rem;
+            margin-bottom: 30px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .post-actions .btn {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <!-- 게시글 상세 카드 -->
+    <div class="post-view-card">
+        <!-- 제목 -->
+        <div class="post-title" th:text="${post.title}">제목</div>
+
+        <!-- 작성자, 작성일, 조회수 등의 메타 정보 -->
+        <div class="post-meta">
+            작성자: <span th:text="${post.member.name}">작성자 이름</span> |
+            작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">2023-09-10 12:00</span>
+        </div>
+
+        <!-- 내용 -->
+        <div class="post-content" th:text="${post.content}">
+            글 내용이 여기에 표시됩니다.
+        </div>
+
+        <!-- 수정, 삭제, 목록으로 돌아가기 버튼 -->
+        <div class="post-actions">
+            <a href="/community" class="btn btn-secondary">목록으로 돌아가기</a>
+            <a th:href="@{/board/edit/{postId}(postId=${post.id})}" class="btn btn-primary">수정</a>
+            <a th:href="@{/board/delete/{postId}(postId=${post.id})}" class="btn btn-danger">삭제</a>
+        </div>
+    </div>
+</div>
+
+<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

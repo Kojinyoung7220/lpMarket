@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>이미 존재하는 회원입니다.</title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div class="alert alert-danger" role="alert">
+        <strong>오류: [[${errorMessage}]]</strong>
+    </div>
+
+    <p>이미 존재하는 회원입니다 다시 회원가입 해주세요.
+        <a href="/members/new" class="btn btn-primary" style="margin-left: 20px;" >회원가입 페이지로 돌아가기</a>
+    </p>
+
+    <br/>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
