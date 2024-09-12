@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -23,9 +25,6 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")  // 또는 "LONGTEXT"로 설정
     private String content;
 
-    private LocalDateTime createAt;
-    private LocalDateTime updatedAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -34,12 +33,17 @@ public class Post {
     @Column(nullable = false, columnDefinition = "INTEGER")
     private int viewCount;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Heart> hearts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Comment> comments = new ArrayList<>();
+    private LocalDateTime createAt;
+    private LocalDateTime updatedAt;
 
     private boolean isUpdated = false;
+    private int likeCount;
 
 
     @Builder
@@ -49,6 +53,16 @@ public class Post {
         this.createAt = LocalDateTime.now();
     }
 
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    // 좋아요 수를 감소시키는 메서드
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
     /**
      * 연관관계 메서드??. //연관관계 편의 메서드는 유지보수하기 편한곳에 두자!!
      */

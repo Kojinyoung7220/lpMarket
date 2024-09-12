@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -70,14 +69,37 @@ public class PostController {
     }
 
     @GetMapping("/board/{postId}")
-    public String postView(@PathVariable("postId") Long postId, Model model){
+    public String postView(@PathVariable("postId") Long postId, Model model, HttpSession session){
         Post post = postService.findOne(postId);
         Post post1 = postService.countView(post);
 
+        Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);  // 세션에서 로그인한 회원 가져오기
+        boolean liked = false;
+
+        if (loginMember != null) {
+            liked = postService.isLikedByMember(loginMember.getId(), postId);
+        }
+
+        model.addAttribute("loginMember", loginMember);
         model.addAttribute("post", post1);
+        model.addAttribute("liked", liked);  // 좋아요 여부 추가
 
         return "community/postView";
     }
+
+    @PostMapping("/board/{postId}/like")
+    public String likePost(@PathVariable("postId") Long postId, HttpSession session) {
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);  // 세션에서 현재 로그인한 사용자 가져오기
+        if (member == null) {
+            // 로그인하지 않은 사용자가 접근할 경우 처리
+            return "redirect:/login"; // 로그인 페이지로 리다이렉트
+        }
+        postService.likePost(member.getId(), postId);  // 좋아요 서비스 호출
+
+        // 현재 게시물 상세 페이지로 리다이렉트
+        return "redirect:/board/" + postId;
+    }
+
 
     @GetMapping("/board/edit/{postId}")
     public String updatePost(@PathVariable("postId") Long postId, Model model){

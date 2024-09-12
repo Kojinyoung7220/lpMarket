@@ -1,6 +1,7 @@
 package com.lpMarket.domain;
 
 import com.lpMarket.domain.community.Comment;
+import com.lpMarket.domain.community.Heart;
 import com.lpMarket.domain.community.Post;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -36,8 +37,11 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) //fetch = FetchType.EAGER 쓰지말고 해결해보자... // orphanRemoval = true도 제거했음!
     private List<Post> posts = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Heart> hearts = new ArrayList<>();
 
     @Builder
     public Member(String name, String password, Address address, String email) {
