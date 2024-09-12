@@ -25,6 +25,8 @@ public class PostResponse {
 
     private final LocalDateTime updatedAt;
 
+    private int viewCount = 0;
+
     private boolean isUpdated = false;
 
     public PostResponse(Post post) {
@@ -34,6 +36,7 @@ public class PostResponse {
         this.author = post.getMember().getName();
         this.createAt = post.getCreateAt();
         this.updatedAt = post.getUpdatedAt();
+        this.viewCount = post.getViewCount();
         this.isUpdated = post.isUpdated();
     }
 

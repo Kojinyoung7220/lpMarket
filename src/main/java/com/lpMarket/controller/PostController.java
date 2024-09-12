@@ -16,10 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -75,8 +72,9 @@ public class PostController {
     @GetMapping("/board/{postId}")
     public String postView(@PathVariable("postId") Long postId, Model model){
         Post post = postService.findOne(postId);
+        Post post1 = postService.countView(post);
 
-        model.addAttribute("post", post);
+        model.addAttribute("post", post1);
 
         return "community/postView";
     }
@@ -104,12 +102,11 @@ public class PostController {
         return "redirect:/community";
     }
 
-
-
-
-
-
-
+    @PostMapping("/board/delete/{postId}")
+    public String deletePost(@PathVariable("postId") Long postId){
+        postService.deletePost(postId);
+        return "redirect:/community";
+    }
 
 
 //    private Post formToPost(PostForm postForm, Member member) {

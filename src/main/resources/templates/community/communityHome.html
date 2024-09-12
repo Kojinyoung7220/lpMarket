@@ -73,6 +73,7 @@
 
         <!-- 작성자, 작성일, 조회수 등의 메타 정보 -->
         <div class="post-meta">
+            조회수: <span th:text="${post.viewCount}">조회수</span>
             작성자: <span th:text="${post.author}">작성자</span> |
             작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">2023-09-10 12:00</span>
             <span th:if="${post.isUpdated}"> | 수정일: <span th:text="${#temporals.format(post.updatedAt, 'yyyy-MM-dd HH:mm')}">2023-09-10 14:00</span></span>
@@ -81,7 +82,9 @@
         <!-- 게시글 액션 버튼 (수정, 삭제) -->
         <div class="post-actions">
             <a class="btn btn-sm btn-info" th:href="@{/board/edit/{id}(id=${post.id})}">수정</a>
-            <a class="btn btn-sm btn-danger" th:href="@{/board/delete/{id}(id=${post.id})}">삭제</a>
+            <form th:action="@{/board/delete/{id}(id=${post.id})}" method="post">
+                <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+            </form>
         </div>
     </div>
 

@@ -62,5 +62,14 @@ public class PostRepository{
         String jpql = "SELECT COUNT(p) FROM Post p";
         return em.createQuery(jpql, Long.class).getSingleResult();
     }
+    /**
+     * 삭제
+     */
+    public void delete(Long id) {
+        em.createQuery("delete from Post p where p.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
 
 }

@@ -4,10 +4,10 @@ import com.lpMarket.domain.Member;
 import com.lpMarket.domain.community.Post;
 import com.lpMarket.repository.MemberRepository;
 import com.lpMarket.repository.PostRepository;
-import com.lpMarket.web.request.PostForm;
 import com.lpMarket.web.request.PostSearch;
 import com.lpMarket.web.request.UpdatePostDto;
 import com.lpMarket.web.response.PostResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,10 +73,32 @@ public class PostService {
         return postRepository.getTotalCount();
     }
 
+    @Transactional
+    public Post countView(Post post){
+        post.setViewCount(post.getViewCount() + 1);
+        return post;
+    }
 
+
+    /**
+     * 수정
+     */
     @Transactional(readOnly = false)
     public void postUpdate(UpdatePostDto updatePostDto) {
         Post post = postRepository.findOne(updatePostDto.getId());
         post.changePost(updatePostDto.getTitle(), updatePostDto.getContent());
+    }
+
+    /**
+     * 삭제
+     */
+    @Transactional
+    public void deletePost(Long postId){
+        Post post = postRepository.findOne(postId);
+        if(post == null){
+            throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
+        }else {
+            postRepository.delete(postId);
+        }
     }
 }

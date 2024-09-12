@@ -49,6 +49,7 @@
 
         <!-- 작성자, 작성일, 조회수 등의 메타 정보 -->
         <div class="post-meta">
+            조회수: <span th:text="${post.viewCount}">조회수</span> |
             작성자: <span th:text="${post.member.name}">작성자 이름</span> |
             작성일: <span th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">2023-09-10 12:00</span>
         </div>

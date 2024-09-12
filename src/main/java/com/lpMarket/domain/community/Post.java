@@ -1,15 +1,11 @@
 package com.lpMarket.domain.community;
 
 import com.lpMarket.domain.Member;
-import com.lpMarket.web.request.UpdatePostDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -33,6 +29,11 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ColumnDefault("0") //알아보자
+    @Column(nullable = false, columnDefinition = "INTEGER")
+    private int viewCount;
+
 
 
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
