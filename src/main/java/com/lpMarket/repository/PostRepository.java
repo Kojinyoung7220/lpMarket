@@ -20,13 +20,6 @@ public class PostRepository{
 
     /**
      * 저장
-     * 조회
-     * 수정
-     * 삭제
-     */
-
-    /**
-     * 저장
      */
     public void save(Post post){
         em.persist(post);
@@ -66,9 +59,10 @@ public class PostRepository{
      * 삭제
      */
     public void delete(Long id) {
-        em.createQuery("delete from Post p where p.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        Post post = em.find(Post.class, id);
+        if(post != null){
+            em.remove(post);
+        }
     }
 
 

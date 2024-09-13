@@ -1,7 +1,10 @@
 package com.lpMarket.controller;
 
+import com.lpMarket.controller.dto.CommentDto;
 import com.lpMarket.domain.Member;
 import com.lpMarket.domain.community.Post;
+import com.lpMarket.service.CommentService;
+import com.lpMarket.service.HeartService;
 import com.lpMarket.service.PostService;
 import com.lpMarket.web.request.PostForm;
 import com.lpMarket.web.request.PostSearch;
@@ -25,7 +28,11 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final HeartService heartService;
 
+    /**
+     * 게시물 홈.
+     */
     @GetMapping("/community")
     public String communityHome(@ModelAttribute PostSearch postSearch, Model model) {
         postSearch.validate(); // null 체크 및 기본값 설정
@@ -41,6 +48,9 @@ public class PostController {
         return "community/communityHome";
     }
 
+    /**
+     * 새게시물 생성.
+     */
     @GetMapping("/board/new")
     public String postHome(Model model, HttpSession session) {
 //        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
@@ -61,32 +71,39 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             return "community/newPost";
         }
-//        postService.save(postForm, member);
         postService.makePost(postForm.getTitle(),postForm.getContent(), member.getId());
 
         return "redirect:/community";
 
     }
 
+    /**
+     * 게시물 상세보기.
+     */
+
     @GetMapping("/board/{postId}")
     public String postView(@PathVariable("postId") Long postId, Model model, HttpSession session){
         Post post = postService.findOne(postId);
-        Post post1 = postService.countView(post);
+        Post updatedPost  = postService.countView(post);
 
         Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);  // 세션에서 로그인한 회원 가져오기
         boolean liked = false;
 
         if (loginMember != null) {
-            liked = postService.isLikedByMember(loginMember.getId(), postId);
+            liked = heartService.isLikedByMember(loginMember.getId(), postId);
         }
 
         model.addAttribute("loginMember", loginMember);
-        model.addAttribute("post", post1);
+        model.addAttribute("post", updatedPost);
         model.addAttribute("liked", liked);  // 좋아요 여부 추가
+        model.addAttribute("commentDto", new CommentDto());
 
         return "community/postView";
     }
 
+    /**
+     * 게시물 좋아요
+     */
     @PostMapping("/board/{postId}/like")
     public String likePost(@PathVariable("postId") Long postId, HttpSession session) {
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);  // 세션에서 현재 로그인한 사용자 가져오기
@@ -94,13 +111,15 @@ public class PostController {
             // 로그인하지 않은 사용자가 접근할 경우 처리
             return "redirect:/login"; // 로그인 페이지로 리다이렉트
         }
-        postService.likePost(member.getId(), postId);  // 좋아요 서비스 호출
+        heartService.likePost(member.getId(), postId);  // 좋아요 서비스 호출
 
         // 현재 게시물 상세 페이지로 리다이렉트
         return "redirect:/board/" + postId;
     }
 
-
+    /**
+     *  게시물 수정
+     */
     @GetMapping("/board/edit/{postId}")
     public String updatePost(@PathVariable("postId") Long postId, Model model){
         Post post = postService.findOne(postId);
@@ -124,21 +143,14 @@ public class PostController {
         return "redirect:/community";
     }
 
+    /**
+     * 게시물 삭제
+     */
     @PostMapping("/board/delete/{postId}")
     public String deletePost(@PathVariable("postId") Long postId){
         postService.deletePost(postId);
         return "redirect:/community";
     }
-
-
-//    private Post formToPost(PostForm postForm, Member member) {
-//        Post post = Post.builder()
-//                .title(postForm.getTitle())
-//                .content(postForm.getContent())
-//                .build();
-//        post.setMember(member);
-//        return post;
-//    }
 
     private UpdatePostForm PostToUpdatePostForm(Post post) {
         return UpdatePostForm.builder()

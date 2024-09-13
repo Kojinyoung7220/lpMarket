@@ -38,6 +38,28 @@
         .post-actions .btn {
             margin-left: 10px;
         }
+
+        /* 댓글 스타일 */
+        .comments-section {
+            margin-top: 50px;
+        }
+
+        .comment {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+
+        .comment-author {
+            font-weight: bold;
+        }
+
+        .comment-content {
+            margin-top: 5px;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+        }
     </style>
 </head>
 <body>
@@ -69,9 +91,53 @@
             </form>
 
             <a href="/community" class="btn btn-secondary">목록으로 돌아가기</a>
-            <a th:href="@{/board/edit/{postId}(postId=${post.id})}" class="btn btn-primary">수정</a>
-            <form th:action="@{/board/delete/{id}(id=${post.id})}" method="post">
-                <button type="submit" class="btn btn-danger">삭제</button>
+
+            <!-- 로그인한 사용자가 글 작성자인 경우에만 수정 및 삭제 버튼 표시 -->
+            <th:block th:if="${loginMember != null and loginMember.id == post.member.id}">
+                <a th:href="@{/board/edit/{postId}(postId=${post.id})}" class="btn btn-primary">수정</a>
+                <form th:action="@{/board/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
+            </th:block>
+        </div>
+    </div>
+
+    <!-- 댓글 섹션 -->
+    <div class="comments-section">
+        <h4>댓글</h4>
+
+        <!-- 댓글 목록 -->
+        <div class="comments-list">
+            <th:block th:each="comment : ${post.comments}">
+                <div class="comment">
+                    <div class="comment-author">
+                        <span th:text="${comment.member.name}">작성자 이름</span>
+                        <span class="text-muted" style="font-size: 0.875rem;">
+                            • <span th:text="${#temporals.format(comment.createAt, 'yyyy-MM-dd HH:mm')}">2023-09-10 13:00</span>
+                        </span>
+                    </div>
+                    <div class="comment-content" th:text="${comment.content}">
+                        댓글 내용이 여기에 표시됩니다.
+                    </div>
+                    <!-- 댓글 작성자 또는 관리자만 삭제 버튼 표시 -->
+                    <th:block th:if="${loginMember != null and (loginMember.id == comment.member.id)}">
+                        <form th:action="@{/comments/delete/{commentId}(commentId=${comment.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-link text-danger">삭제</button>
+                        </form>
+                    </th:block>
+                </div>
+            </th:block>
+        </div>
+
+        <!-- 댓글 작성 폼 -->
+        <div class="comment-form mt-4">
+            <h5>댓글 작성</h5>
+            <form th:action="@{/board/{postId}/add(postId=${post.id})}" method="post" th:object="${commentDto}">
+                <div class="form-group">
+                    <textarea class="form-control" th:field="*{comment}" rows="3" placeholder="댓글을 작성하세요."></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">에러 메시지</div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">댓글 등록</button>
             </form>
         </div>
     </div>
