@@ -71,6 +71,7 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             return "community/newPost";
         }
+
         postService.makePost(postForm.getTitle(),postForm.getContent(), member.getId());
 
         return "redirect:/community";

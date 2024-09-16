@@ -5,6 +5,7 @@
     <title>게시글 보기</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <style>
+        /* 기존 스타일 유지 */
         .post-view-card {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -17,6 +18,9 @@
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 15px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .post-meta {
@@ -28,8 +32,13 @@
         .post-content {
             font-size: 1.125rem;
             margin-bottom: 30px;
+            /* 여기서부터 추가된 속성입니다 */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
+        /* 이하 기존 스타일 그대로 */
         .post-actions {
             display: flex;
             justify-content: flex-end;
@@ -55,6 +64,10 @@
 
         .comment-content {
             margin-top: 5px;
+            /* 댓글 내용에도 동일한 문제를 방지하기 위해 추가 */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .comment-form textarea {

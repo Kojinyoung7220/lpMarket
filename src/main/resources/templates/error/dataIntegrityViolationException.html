@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>글자 수가 초과되었습니다.</title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div class="alert alert-danger" role="alert">
+        <strong>오류: 제목 200자, 내용 1000자 제한.</strong>
+    </div>
+
+    <p>제목이나 내용의 글자 수가 초과 되었습니다. 다시 작성해주세요.
+        <a href="/community" class="btn btn-primary" style="margin-left: 20px;" >커뮤니티 홈</a>
+    </p>
+
+    <br/>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>

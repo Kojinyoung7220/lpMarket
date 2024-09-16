@@ -2,6 +2,7 @@ package com.lpMarket.domain.community;
 
 import com.lpMarket.domain.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -18,11 +19,11 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
     private String title;
 
     @Lob //@Lob은 일반적인 데이터베이스에서 저장하는 길이인 255개 이상의 문자를 저장하고 싶을 때 지정한다. ->mysql에서 tinytext로 되어있는 거 확인.
-    @Column(nullable = false, columnDefinition = "TEXT")  // 또는 "LONGTEXT"로 설정
+    @Column(nullable = false, length = 1000, columnDefinition = "TEXT")  // 또는 "LONGTEXT"로 설정
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

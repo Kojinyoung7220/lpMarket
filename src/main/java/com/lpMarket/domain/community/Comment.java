@@ -16,7 +16,7 @@ public class Comment {
     private Long id;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     private LocalDateTime createAt;

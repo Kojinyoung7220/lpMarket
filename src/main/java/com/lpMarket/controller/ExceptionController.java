@@ -3,6 +3,7 @@ package com.lpMarket.controller;
 import com.lpMarket.exception.ExistingMemberException;
 import com.lpMarket.exception.NotEnoughStockException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,6 +31,13 @@ public class ExceptionController {
         return "error/existingMemberException";
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public String dataIntegrityViolationException(DataIntegrityViolationException ex, Model model){
+
+//        model.addAttribute("errorMessage", ex.getMessage());
+
+        return "error/dataIntegrityViolationException";
+    }
 
 
 
