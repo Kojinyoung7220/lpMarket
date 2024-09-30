@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,9 +29,12 @@ public class CreateItemForm {
     @Min(value = 1, message = "수량은 최소 1개 이상이어야 합니다.")
     private Integer stockQuantity;
 
-    private String Genre;
+    private String genre;
     private String era;
     private String artist;
+
+    private List<MultipartFile> imageFiles; //이미지 파일들
+    private MultipartFile attachFile;
 
     @Builder
     public CreateItemForm(Long id, String name, int price, int stockQuantity, String genre, String era, String artist) {
@@ -36,9 +42,8 @@ public class CreateItemForm {
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        Genre = genre;
+        this.genre = genre;
         this.era = era;
         this.artist = artist;
     }
-
 }

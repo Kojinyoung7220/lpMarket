@@ -1,6 +1,8 @@
 package com.lpMarket.controller;
 
 import com.lpMarket.domain.Item;
+import com.lpMarket.domain.UploadFile;
+import com.lpMarket.domain.file.FileStore;
 import com.lpMarket.service.ItemService;
 import com.lpMarket.web.request.CreateItemForm;
 import com.lpMarket.web.request.ItemForm;
@@ -10,11 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -22,6 +23,8 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final FileStore fileStore;
+
 
     @GetMapping(value = "/items/new")
     public String itemSignIn(Model model){
@@ -29,8 +32,11 @@ public class ItemController {
         return "items/createItemForm";
     }
 
+    /**
+     *  이미지 추가 해야 됨. dto
+     */
     @PostMapping(value = "/items/new")
-    public String createItem(@Valid @ModelAttribute("itemForm") CreateItemForm itemForm, BindingResult result){
+    public String createItem(@Valid @ModelAttribute("itemForm") CreateItemForm itemForm, BindingResult result) throws IOException {
 
         if(result.hasErrors()){
             return "items/createItemForm";
@@ -75,7 +81,10 @@ public class ItemController {
         return "redirect:/items";
 
     }
-    private Item FormToItem(CreateItemForm itemForm) {
+    private Item FormToItem(CreateItemForm itemForm) throws IOException {
+        UploadFile uploadFile = fileStore.storeFile(itemForm.getAttachFile());
+        List<UploadFile> uploadFiles = fileStore.storeFiles(itemForm.getImageFiles());
+
         Item item = Item.builder()
                 .name(itemForm.getName())
                 .price(itemForm.getPrice())
@@ -83,7 +92,10 @@ public class ItemController {
                 .genre(itemForm.getGenre())
                 .era(itemForm.getEra())
                 .artist(itemForm.getArtist())
+                .attachFile(uploadFile)
+                .imageFiles(uploadFiles)
                 .build();
+
         return item;
     }
 

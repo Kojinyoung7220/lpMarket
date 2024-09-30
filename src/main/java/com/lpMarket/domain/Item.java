@@ -23,11 +23,18 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @Embedded
+    private UploadFile attachFile;
+
+    @ElementCollection // 값 타입 컬렉션
+    @CollectionTable(name = "item_images", joinColumns = @JoinColumn(name = "item_id"))
+    private List<UploadFile> imageFiles = new ArrayList<>();
+
     private String name;
     private int price;
     private int stockQuantity;
 
-    private String Genre;
+    private String genre;
     private String era;
     private String artist;
 
@@ -46,20 +53,22 @@ public class Item {
     }
 
     @Builder
-    public Item(String name, int price, int stockQuantity, String genre, String era, String artist) {
+    public Item(String name, int price, int stockQuantity, String genre, String era, String artist, UploadFile attachFile, List<UploadFile> imageFiles) {
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.Genre = genre;
+        this.genre = genre;
         this.era = era;
         this.artist = artist;
+        this.attachFile = attachFile;
+        this.imageFiles = imageFiles;
     }
 
     public void changeItem(String name, int price, int stockQuantity, String genre, String era, String artist) {
         this.name =name;
         this.price =price;
         this.stockQuantity =stockQuantity;
-        this.Genre =genre;
+        this.genre =genre;
         this.era =era;
         this.artist =artist;
 }

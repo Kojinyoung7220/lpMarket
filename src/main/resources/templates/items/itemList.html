@@ -1,40 +1,60 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
 <body>
-<div class="container">
-    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-    <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>상품명</th>
-                <th>가격</th>
-                <th>재고수량</th>
-                <th>장르</th>
-                <th>시대</th>
-                <th>아티스트명</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${items}">
-                <td th:text="${item.id}"></td>
-                <td th:text="${item.name}"></td>
-                <td th:text="${item.price}"></td>
-                <td th:text="${item.stockQuantity}"></td>
-                <td th:text="${item.Genre}"></td>
-                <td th:text="${item.era}"></td>
-                <td th:text="${item.artist}"></td>
-                <td>
-                    <a href="#" th:href="@{/items/{id}/edit (id=${item.id})}"
-                       class="btn btn-primary" role="button">수정</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div> <div th:replace="fragments/footer :: footer"/>
+<!-- 네비게이션 바 포함 -->
+<div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+
+<div class="container mt-4">
+    <!-- 아이템 리스트 -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-xl-5 g-4">
+        <div class="col" th:each="item : ${items}">
+            <div class="card h-100">
+                <!-- 이미지 캐러셀 (컨트롤 버튼 제거) -->
+                <div id="carouselItem[[${item.id}]]" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div th:each="imageFile, iterStat : ${item.imageFiles}"
+                             th:classappend="${iterStat.index == 0} ? ' active' : ''"
+                             class="carousel-item">
+                            <img th:src="@{'/images/' + ${imageFile.storeFileName}}"
+                                 th:alt="${imageFile.uploadFileName}"
+                                 class="d-block w-100"
+                                 style="height: 200px; object-fit: cover;">
+                        </div>
+                    </div>
+                    <!-- 캐러셀 컨트롤 제거 -->
+                </div>
+
+                <!-- 카드 본문 -->
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${item.name}">상품명</h5>
+                    <p class="card-text"><strong>가격:</strong> <span th:text="${item.price}">0</span> 원</p>
+                    <p class="card-text"><strong>재고:</strong> <span th:text="${item.stockQuantity}">0</span> 개</p>
+                    <p class="card-text"><strong>장르:</strong> <span th:text="${item.genre}">-</span></p>
+                    <p class="card-text"><strong>시대:</strong> <span th:text="${item.era}">-</span></p>
+                    <p class="card-text"><strong>아티스트:</strong> <span th:text="${item.artist}">-</span></p>
+                </div>
+
+                <!-- 카드 푸터 (수정 버튼) -->
+                <div class="card-footer">
+                    <a th:href="@{/items/{id}/edit(id=${item.id})}" class="btn btn-primary">수정</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div> <!-- /container -->
+
+<!-- 한 줄에 최대 5개의 컬럼을 표시하기 위한 커스텀 CSS -->
+<style>
+    @media (min-width: 1200px) { /* Bootstrap의 xl 브레이크포인트 기준 */
+        .row-cols-xl-5 > .col {
+            flex: 0 0 20%;
+            max-width: 20%;
+        }
+    }
+</style>
+
+<!-- 푸터 포함 -->
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

@@ -36,4 +36,8 @@ public class ItemService {
 //        itemRepository.save(item); // 변경감지가 일어나나? -> 일어난다~~o
      }
 
+
+
+
+
 }
