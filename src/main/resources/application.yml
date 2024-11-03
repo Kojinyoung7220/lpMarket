@@ -2,7 +2,7 @@ spring:
   datasource:
     # MySQL
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/lpshop?&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://127.0.0.1:3307/lpshop?&serverTimezone=Asia/Seoul
     username: root
     password: 1234
   thymeleaf:

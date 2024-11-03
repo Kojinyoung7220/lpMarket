@@ -1,7 +1,7 @@
 package com.lpMarket.service;
 
 import com.lpMarket.domain.Member;
-import com.lpMarket.repository.MemberRepository;
+import com.lpMarket.repository.dataJpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,9 @@ public class LoginService {
 
 
     public Member login(String loginEmail, String password){
-        Member member = memberRepository.findByEmail(loginEmail);
-
-        if(member != null && member.getPassword().equals(password)){
-            return member;
-        }else {
-            return null;
+        return memberRepository.findByEmail(loginEmail)
+                .filter(member -> member.getPassword().equals(password))
+                .orElseThrow(null);
         }
     }
 
-}

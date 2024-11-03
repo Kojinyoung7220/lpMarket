@@ -2,8 +2,8 @@ package com.lpMarket.service;
 
 import com.lpMarket.domain.Member;
 import com.lpMarket.domain.community.Post;
-import com.lpMarket.repository.MemberRepository;
 import com.lpMarket.repository.PostRepository;
+import com.lpMarket.repository.dataJpa.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,8 @@ class PostServiceTest {
                 .content("14141414")
                 .build();
 
-        postService.save(post);
+        //then
+        assertThrows(DataIntegrityViolationException.class,() -> postService.save(post), "오류입니당");
     }
 
     @Test
@@ -82,7 +83,4 @@ class PostServiceTest {
                         "ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ", "제목 내용수 초과",member.getId()));
 
     }
-
-
-
 }

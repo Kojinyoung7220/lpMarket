@@ -3,9 +3,10 @@ package com.lpMarket.service;
 import com.lpMarket.domain.Member;
 import com.lpMarket.domain.community.Heart;
 import com.lpMarket.domain.community.Post;
+import com.lpMarket.exception.ExistingMemberException;
 import com.lpMarket.repository.HeartRepository;
-import com.lpMarket.repository.MemberRepository;
 import com.lpMarket.repository.PostRepository;
+import com.lpMarket.repository.dataJpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ public class HeartService {
             post.decrementLikeCount();  // 좋아요 수 감소
         } else {
             // 좋아요 추가
-            Member member = memberRepository.findOne(memberId);
+            Member member = memberRepository.findById(memberId).orElseThrow(() -> new ExistingMemberException("HeratSerivce error : no Member"));
             Heart newHeart = Heart.createHeart(member, post);
             heartRepository.save(newHeart);
             post.incrementLikeCount();  // 좋아요 수 증가

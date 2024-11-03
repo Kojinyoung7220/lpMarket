@@ -1,13 +1,15 @@
 package com.lpMarket.service;
 
 import com.lpMarket.domain.Member;
-import com.lpMarket.repository.MemberRepository;
+import com.lpMarket.exception.ExistingMemberException;
+import com.lpMarket.repository.dataJpa.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +37,7 @@ class MemberServiceTest {
 
         //then
         Assertions.assertEquals(saveId, 1L);
-        assertEquals(member, memberRepository.findOne(saveId));
+        assertEquals(member, memberRepository.findById(saveId).orElseThrow());
     }
 
     @Test
@@ -52,6 +54,6 @@ class MemberServiceTest {
         memberService.join(member);
 
         //expected
-        Assertions.assertThrows(IllegalStateException.class, () -> memberService.join(member1));
+        Assertions.assertThrows(ExistingMemberException.class, () -> memberService.join(member1));
     }
 }

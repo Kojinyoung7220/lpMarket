@@ -1,9 +1,10 @@
 package com.lpMarket.service;
 
 import com.lpMarket.domain.*;
+import com.lpMarket.exception.ExistingMemberException;
 import com.lpMarket.repository.ItemRepository;
-import com.lpMarket.repository.MemberRepository;
 import com.lpMarket.repository.OrderRepository;
+import com.lpMarket.repository.dataJpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class OrderService {
     @Transactional
     public Long order(Long memberId, Long itemId, int count){ //여기에 id를 넘기는게 좋나? 객체를 넘기는게 좋나
 
-        Member member = memberRepository.findOne(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ExistingMemberException());
         Item item = itemRepository.findOne(itemId);
 
         Delivery delivery =Delivery.builder()

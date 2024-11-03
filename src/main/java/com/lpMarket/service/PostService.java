@@ -1,11 +1,10 @@
 package com.lpMarket.service;
 
 import com.lpMarket.domain.Member;
-import com.lpMarket.domain.community.Heart;
 import com.lpMarket.domain.community.Post;
-import com.lpMarket.repository.HeartRepository;
-import com.lpMarket.repository.MemberRepository;
+import com.lpMarket.exception.ExistingMemberException;
 import com.lpMarket.repository.PostRepository;
+import com.lpMarket.repository.dataJpa.MemberRepository;
 import com.lpMarket.web.request.PostSearch;
 import com.lpMarket.web.request.UpdatePostDto;
 import com.lpMarket.web.response.PostResponse;
@@ -48,7 +47,7 @@ public class PostService {
 //    }
     @Transactional(readOnly = false)
     public Long makePost(String title, String content, Long memberId){  //객체넘기는거 id넘기는거 확인해보자.
-        Member findMember = memberRepository.findOne(memberId); //이렇게 member를 먼저 조회하면 LazyInitializationException이 해결될까?
+        Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new ExistingMemberException("PostService 에러")); //이렇게 member를 먼저 조회하면 LazyInitializationException이 해결될까?
 
         Post post = Post.createPost(title, content, findMember);
 

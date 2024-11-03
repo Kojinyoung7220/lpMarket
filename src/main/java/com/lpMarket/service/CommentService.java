@@ -4,8 +4,8 @@ import com.lpMarket.domain.Member;
 import com.lpMarket.domain.community.Comment;
 import com.lpMarket.domain.community.Post;
 import com.lpMarket.repository.CommentRepository;
-import com.lpMarket.repository.MemberRepository;
 import com.lpMarket.repository.PostRepository;
+import com.lpMarket.repository.dataJpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class CommentService {
      *  댓글 추가
      */
     public Long addComment(String content, Long memberId, Long postId){
-        Member member = memberRepository.findOne(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow();
         Post post = postRepository.findOne(postId);
 
         Comment comment = Comment.createComment(content, member, post);

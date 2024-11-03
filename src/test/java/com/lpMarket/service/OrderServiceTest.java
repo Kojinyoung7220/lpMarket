@@ -2,8 +2,6 @@ package com.lpMarket.service;
 
 import com.lpMarket.domain.*;
 import com.lpMarket.exception.NotEnoughStockException;
-import com.lpMarket.repository.ItemRepository;
-import com.lpMarket.repository.MemberRepository;
 import com.lpMarket.repository.OrderRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
