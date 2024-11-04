@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class HeartRepository {
+public class HeartRepositoryOld {
 
     private final EntityManager em;
 

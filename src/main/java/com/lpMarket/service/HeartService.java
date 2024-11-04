@@ -4,12 +4,14 @@ import com.lpMarket.domain.Member;
 import com.lpMarket.domain.community.Heart;
 import com.lpMarket.domain.community.Post;
 import com.lpMarket.exception.ExistingMemberException;
-import com.lpMarket.repository.HeartRepository;
 import com.lpMarket.repository.PostRepository;
+import com.lpMarket.repository.dataJpa.HeartRepository;
 import com.lpMarket.repository.dataJpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,11 +28,11 @@ public class HeartService {
     @Transactional
     public void likePost(Long memberId, Long postId) {
         Post post = postRepository.findOne(postId);
-        Heart existingHeart  = heartRepository.findHeartByMemberAndPost(memberId, postId);
+        Optional<Heart> existingHeart  = heartRepository.findHeartByMemberAndPost(memberId, postId);
 
-        if (existingHeart != null) {
+        if (existingHeart.isPresent()) {
             // 좋아요 취소 -> Heart 엔티티 삭제
-            heartRepository.delete(existingHeart);
+            heartRepository.delete(existingHeart.get());
             post.decrementLikeCount();  // 좋아요 수 감소
         } else {
             // 좋아요 추가
@@ -43,6 +45,6 @@ public class HeartService {
     }
     @Transactional(readOnly = true)
     public boolean isLikedByMember(Long memberId, Long postId) {
-        return heartRepository.findHeartByMemberAndPost(memberId, postId) != null;
+        return heartRepository.findHeartByMemberAndPost(memberId, postId).isPresent();
     }
 }
