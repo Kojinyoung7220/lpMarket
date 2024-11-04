@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class CommentRepository {
+public class CommentRepositoryOld {
 
 
     private final EntityManager em;

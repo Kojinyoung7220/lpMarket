@@ -3,8 +3,8 @@ package com.lpMarket.service;
 import com.lpMarket.domain.Member;
 import com.lpMarket.domain.community.Comment;
 import com.lpMarket.domain.community.Post;
-import com.lpMarket.repository.CommentRepository;
 import com.lpMarket.repository.PostRepository;
+import com.lpMarket.repository.dataJpa.CommentRepository;
 import com.lpMarket.repository.dataJpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class CommentService {
 
         Long id = comment.getPost().getId();
 
-        commentRepository.delete(commentId);
+        commentRepository.delete(comment);
 
         return id;
     }
